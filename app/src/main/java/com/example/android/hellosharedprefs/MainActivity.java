@@ -15,6 +15,7 @@
  */
 package com.example.android.hellosharedprefs;
 
+import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -44,7 +45,10 @@ public class MainActivity extends AppCompatActivity {
     private final String COUNT_KEY = "count";
     // Key for current color
     private final String COLOR_KEY = "color";
-
+    //Name of the SharedPreferences file
+    private String sharedPrefile = "com.example.android.hellosharedprefs";
+    //Reference to SharedPreferences object
+    private SharedPreferences mPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +59,9 @@ public class MainActivity extends AppCompatActivity {
         mShowCountTextView = findViewById(R.id.count_textview);
         mColor = ContextCompat.getColor(this,
                 R.color.default_background);
+
+        //Initialize the sharedPreferences opens this named file in this mode.
+        mPreferences = getSharedPreferences(sharedPrefile, MODE_PRIVATE);
 
         // Restore the saved instance state.
         if (savedInstanceState != null) {
