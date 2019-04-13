@@ -63,17 +63,27 @@ public class MainActivity extends AppCompatActivity {
         //Initialize the sharedPreferences opens this named file in this mode.
         mPreferences = getSharedPreferences(sharedPrefile, MODE_PRIVATE);
 
-        // Restore the saved instance state.
-        if (savedInstanceState != null) {
+        //Restore mCount from sharedPreferences.
+        mCount = mPreferences.getInt(COUNT_KEY, 0);
+        //Update the value of the main TextView with the new count.
+        mShowCountTextView.setText(String.format("%s",mCount));
 
-            mCount = savedInstanceState.getInt(COUNT_KEY);
-            if (mCount != 0) {
-                mShowCountTextView.setText(String.format("%s", mCount));
-            }
+        //Restore mColor from sharedPreferences.
+        mColor = mPreferences.getInt(COLOR_KEY, mColor);
+        mShowCountTextView.setBackgroundColor(mColor);
 
-            mColor = savedInstanceState.getInt(COLOR_KEY);
-            mShowCountTextView.setBackgroundColor(mColor);
-        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //Get an editor for the SharedPreferences object.
+        SharedPreferences.Editor preferencesEditor = mPreferences.edit();
+
+        //Place the mCount and mColor integers into the sharedPreferences
+        preferencesEditor.putInt(COUNT_KEY, mCount);
+        preferencesEditor.putInt(COLOR_KEY, mColor);
+        preferencesEditor.apply();
     }
 
     /**
@@ -100,20 +110,20 @@ public class MainActivity extends AppCompatActivity {
         mShowCountTextView.setText(String.format("%s", mCount));
     }
 
-    /**
-     * Saves the instance state if the activity is restarted (for example,
-     * on device rotation.) Here you save the values for the count and the
-     * background color.
-     *
-     * @param outState The state data.
-     */
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        outState.putInt(COUNT_KEY, mCount);
-        outState.putInt(COLOR_KEY, mColor);
-    }
+//    /**
+//     * Saves the instance state if the activity is restarted (for example,
+//     * on device rotation.) Here you save the values for the count and the
+//     * background color.
+//     *
+//     * @param outState The state data.
+//     */
+//    @Override
+//    protected void onSaveInstanceState(Bundle outState) {
+//        super.onSaveInstanceState(outState);
+//
+//        outState.putInt(COUNT_KEY, mCount);
+//        outState.putInt(COLOR_KEY, mColor);
+//    }
 
     /**
      * Handles the onClick for the Reset button. Resets the global count and
